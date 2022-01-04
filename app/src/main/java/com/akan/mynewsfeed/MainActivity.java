@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements CategoryRVAdapter.categoryClickInterface{
    // ea39a79a90e044fb98ce7f58e6394c2d
     private NewsAdapter adapter;
+    ProgressBar progressBar;
     private RecyclerView recyclerView, categoryRV;
     private ArrayList<Articles> articlesArrayList;
     private ArrayList<CategoryRVmodal> categoryArrayList;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
 
         recyclerView = findViewById(R.id.idRecyclerView);
         categoryRV = findViewById(R.id.idCategoryRV);
+        progressBar = findViewById(R.id.ProgressBar);
         articlesArrayList = new ArrayList<>();
         categoryArrayList = new ArrayList<>();
         adapter = new NewsAdapter(articlesArrayList,this);
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     }
 
     private void getNews(String category){
+        progressBar.setVisibility(View.VISIBLE);
         articlesArrayList.clear();
         String categoryUrl = "https://newsapi.org/v2/top-headlines?country=in&category="+ category + "&apikey=ea39a79a90e044fb98ce7f58e6394c2d";
         String url = "https://newsapi.org/v2/top-headlines?country=in&excludeDomains=stackoverflow.com&sortBy=publishedAt&language=en&apiKey=ea39a79a90e044fb98ce7f58e6394c2d";
@@ -78,11 +82,11 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
             @Override
             public void onResponse(Call<NewsModal> call, Response<NewsModal> response) {
                 NewsModal newsModal = response.body();
+                progressBar.setVisibility(View.GONE);
                 ArrayList<Articles> articles = newsModal.getArticles();
                 for(int i=0;i<articles.size();i++){
                     articlesArrayList.add(new Articles(articles.get(i).getTitle(),articles.get(i).getDescription(),
                             articles.get(i).getUrlToImage(),articles.get(i).getUrl(),articles.get(i).getContent()));
-
                 }
                 adapter.notifyDataSetChanged();
             }
