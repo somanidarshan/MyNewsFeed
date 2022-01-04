@@ -17,11 +17,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CategoryRVAdapter.categoryClickInterface{
    // ea39a79a90e044fb98ce7f58e6394c2d
-    NewsAdapter adapter;
-    RecyclerView recyclerView;
-    ArrayList<Articles> articlesArrayList;
+    private NewsAdapter adapter;
+    private RecyclerView recyclerView, categoryRV;
+    private ArrayList<Articles> articlesArrayList;
+    private ArrayList<CategoryRVmodal> categoryArrayList;
+    private CategoryRVAdapter categoryRVAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +31,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.idRecyclerView);
+        categoryRV = findViewById(R.id.idCategoryRV);
         articlesArrayList = new ArrayList<>();
+        categoryArrayList = new ArrayList<>();
         adapter = new NewsAdapter(articlesArrayList,this);
+        categoryRVAdapter = new CategoryRVAdapter(categoryArrayList, this,this::onCategoryClick);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        getNews();
+        categoryRV.setAdapter(categoryRVAdapter);
+        getCategories();
+        getNews("All");
         adapter.notifyDataSetChanged();
     }
 
-    private void getNews(){
+    private void getCategories(){
+        categoryArrayList.add(new CategoryRVmodal("All","https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/SKD-bqAkQjhvrjayf/videoblocks-news-intro-graphic-animation-with-grid-and-world-map-abstract-background-elegant-and-luxury-dynamic-style-for-news-and-business-template_ry_hdemhl_thumbnail-1080_01.png"));
+        categoryArrayList.add(new CategoryRVmodal("Technology","https://www.deaf-interpreter.com/wp-content/uploads/2016/02/digital_diagram_business_and_technology_by_prophotostock-d711fj6.jpg"));
+        categoryArrayList.add(new CategoryRVmodal("Science","https://getwallpapers.com/wallpaper/full/b/0/b/1407474-full-size-science-backgrounds-3840x2160-for-full-hd.jpg"));
+        categoryArrayList.add(new CategoryRVmodal("Sports","https://lifestyle.iresearchnet.com/wp-content/uploads/2017/03/sports-psychology-26.jpg"));
+        categoryArrayList.add(new CategoryRVmodal("General","http://www.panaynews.net/wp-content/uploads/2018/08/DSC_8930-2.jpg"));
+        categoryArrayList.add(new CategoryRVmodal("Business","https://headsinternational.com/site/wp-content/uploads/business-professional-service.jpg"));
+        categoryArrayList.add(new CategoryRVmodal("Entertainment","https://cpanews.net/wp-content/uploads/2021/12/Live-Party-Entertainment-Ideas-For-Your-Next-Celebration.jpg"));
+        categoryArrayList.add(new CategoryRVmodal("Health","https://viridianadvisors.com/wp-content/uploads/2015/07/health-background.jpg"));
+        categoryRVAdapter.notifyDataSetChanged();
+    }
+
+    private void getNews(String category){
         articlesArrayList.clear();
+        String categoryUrl = "https://newsapi.org/v2/top-headlines?country=in&category="+ category + "&apikey=ea39a79a90e044fb98ce7f58e6394c2d";
         String url = "https://newsapi.org/v2/top-headlines?country=in&excludeDomains=stackoverflow.com&sortBy=publishedAt&language=en&apiKey=ea39a79a90e044fb98ce7f58e6394c2d";
         String Base_Url = "https://newsapi.org/";
         Retrofit retrofit = new Retrofit.Builder()
@@ -47,7 +67,12 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
         Call<NewsModal> call;
-        call = retrofitAPI.getAllNews(url);
+        if(category.equals("All")){
+            call = retrofitAPI.getAllNews(url);
+        }
+        else{
+            call = retrofitAPI.getNewsByCategory(categoryUrl);
+        }
 
         call.enqueue(new Callback<NewsModal>() {
             @Override
@@ -69,4 +94,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onCategoryClick(int position) {
+        String category = categoryArrayList.get(position).getCategory();
+        getNews(category);
+    }
 }

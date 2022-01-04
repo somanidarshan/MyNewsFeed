@@ -14,8 +14,7 @@
             android:id="@+id/idImageView"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/idTitleTV"
@@ -36,12 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/idTitleTV"
-            android:layout_margin="3dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
             android:maxLines="3"
             android:padding="3dp"
             android:text="Sub Heading"
-            android:textColor="@color/black"
-            />
+            android:textColor="@color/black" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

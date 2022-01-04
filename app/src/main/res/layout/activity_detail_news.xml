@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/yellow_500"
     tools:context=".DetailNews">
 
     <ScrollView
@@ -62,9 +61,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Read full news"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/blue_500"
         android:textAllCaps="false"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:id="@+id/idReadNewsBtn"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
