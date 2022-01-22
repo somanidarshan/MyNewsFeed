@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -21,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements CategoryRVAdapter.categoryClickInterface{
    // ea39a79a90e044fb98ce7f58e6394c2d
     private NewsAdapter adapter;
-    ProgressBar progressBar;
+    ProgressBar progressBar,categoryPB;
     private RecyclerView recyclerView, categoryRV;
     private ArrayList<Articles> articlesArrayList;
     private ArrayList<CategoryRVmodal> categoryArrayList;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         recyclerView = findViewById(R.id.idRecyclerView);
         categoryRV = findViewById(R.id.idCategoryRV);
         progressBar = findViewById(R.id.ProgressBar);
+        categoryPB = findViewById(R.id.CategoryProgressBar);
         articlesArrayList = new ArrayList<>();
         categoryArrayList = new ArrayList<>();
         adapter = new NewsAdapter(articlesArrayList,this);
@@ -44,9 +47,11 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         categoryRV.setAdapter(categoryRVAdapter);
         getCategories();
         getNews("All");
+        categoryRV.getRecycledViewPool().clear();
+        recyclerView.getRecycledViewPool().clear();
         adapter.notifyDataSetChanged();
     }
-
+    
     private void getCategories(){
         categoryArrayList.add(new CategoryRVmodal("All","https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/SKD-bqAkQjhvrjayf/videoblocks-news-intro-graphic-animation-with-grid-and-world-map-abstract-background-elegant-and-luxury-dynamic-style-for-news-and-business-template_ry_hdemhl_thumbnail-1080_01.png"));
         categoryArrayList.add(new CategoryRVmodal("Technology","https://www.deaf-interpreter.com/wp-content/uploads/2016/02/digital_diagram_business_and_technology_by_prophotostock-d711fj6.jpg"));
@@ -60,7 +65,10 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
     }
 
     private void getNews(String category){
+        categoryRV.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        categoryPB.setVisibility(View.VISIBLE);
+
         articlesArrayList.clear();
         String categoryUrl = "https://newsapi.org/v2/top-headlines?country=in&category="+ category + "&apikey=ea39a79a90e044fb98ce7f58e6394c2d";
         String url = "https://newsapi.org/v2/top-headlines?country=in&excludeDomains=stackoverflow.com&sortBy=publishedAt&language=en&apiKey=ea39a79a90e044fb98ce7f58e6394c2d";
@@ -83,17 +91,20 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
             public void onResponse(Call<NewsModal> call, Response<NewsModal> response) {
                 NewsModal newsModal = response.body();
                 progressBar.setVisibility(View.GONE);
+                categoryPB.setVisibility(View.GONE);
+                categoryRV.setVisibility(View.VISIBLE);
+
                 ArrayList<Articles> articles = newsModal.getArticles();
                 for(int i=0;i<articles.size();i++){
                     articlesArrayList.add(new Articles(articles.get(i).getTitle(),articles.get(i).getDescription(),
-                            articles.get(i).getUrlToImage(),articles.get(i).getUrl(),articles.get(i).getContent()));
+                            articles.get(i).getUrlToImage(),articles.get(i).getUrl(),articles.get(i).getContent(),articles.get(i).getSource()));
                 }
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<NewsModal> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Fail to get news", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Connection Error", Toast.LENGTH_SHORT).show();
             }
         });
     }

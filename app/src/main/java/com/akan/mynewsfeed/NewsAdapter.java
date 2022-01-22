@@ -2,6 +2,8 @@ package com.akan.mynewsfeed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         Articles articles = articlesArrayList.get(position);
         holder.subTitleTV.setText(articles.getDescription());
         holder.titleTV.setText(articles.getTitle());
+        holder.SourceTV.setText(articles.getSource().getName());
+
         Picasso.get().load(articles.getUrlToImage()).into(holder.img);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -62,13 +66,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     public class NewsViewHolder extends RecyclerView.ViewHolder {
         ImageView img;
-        TextView titleTV,subTitleTV;
+        TextView titleTV,subTitleTV,SourceTV;
 
         public NewsViewHolder(@NonNull View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.idImageView);
             titleTV = itemView.findViewById(R.id.idTitleTV);
             subTitleTV = itemView.findViewById(R.id.idSubTitleTV);
+            SourceTV = itemView.findViewById(R.id.idSource);
         }
     }
 }

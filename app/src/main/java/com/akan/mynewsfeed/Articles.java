@@ -1,18 +1,22 @@
 package com.akan.mynewsfeed;
 
+import java.util.ArrayList;
+
 public class Articles {
     private String title;
     private String description;
     private String urlToImage;
     private String url;
     private String content;
+    private Source source;
 
-    public Articles(String title, String description, String urlToImage, String url, String content) {
+    public Articles(String title, String description, String urlToImage, String url, String content,Source source) {
         this.title = title;
         this.description = description;
         this.urlToImage = urlToImage;
         this.url = url;
         this.content = content;
+        this.source = source;
     }
 
     public String getTitle() {
@@ -25,6 +29,10 @@ public class Articles {
 
     public String getDescription() {
         return description;
+    }
+
+    public Source getSource() {
+        return source;
     }
 
     public void setDescription(String description) {

@@ -21,14 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/idImageView"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="3dp"
+            android:maxLines="2"
+            android:padding="3dp"
             android:text="News Heading"
             android:textColor="@color/black"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_margin="3dp"
-            android:maxLines="2"
-            android:padding="3dp"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/idSubTitleTV"
@@ -43,6 +45,26 @@
             android:padding="3dp"
             android:text="Sub Heading"
             android:textColor="@color/black" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/idSubTitleTV">
+
+            <TextView
+                android:id="@+id/idSource"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="3dp"
+                android:padding="3dp"
+                android:text="source"
+                android:textColor="@color/blue_500"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
