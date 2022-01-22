@@ -7,6 +7,7 @@
     tools:context=".DetailNews">
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -58,16 +59,18 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/idReadNewsBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Read full news"
-        android:backgroundTint="@color/blue_500"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:id="@+id/idReadNewsBtn"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/blue_500"
+        android:text="Read full news"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
