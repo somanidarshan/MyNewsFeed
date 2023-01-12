@@ -11,5 +11,8 @@
     <color name="yellow_700">#FBC02D</color>
     <color name="blue_500">#2196F3</color>
     <color name="blue_700">#1976D2</color>
+    <color name="gray">#808080</color>
+    <color name="light_slate_gray">#778899</color>
+
 
 </resources>

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
    // ea39a79a90e044fb98ce7f58e6394c2d
     private NewsAdapter adapter;
     ProgressBar progressBar,categoryPB;
+    private Boolean shoulddisplayloading;
     private RecyclerView recyclerView, categoryRV;
     private ArrayList<Articles> articlesArrayList;
     private ArrayList<CategoryRVmodal> categoryArrayList;
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+        ProgressDialog progressBar = new ProgressDialog(MainActivity.this);
+        progressBar.show();
+        shoulddisplayloading = true;
+
         Call<NewsModal> call;
         if(category.equals("All")){
             call = retrofitAPI.getAllNews(url);
@@ -87,12 +93,35 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
         else{
             call = retrofitAPI.getNewsByCategory(categoryUrl);
         }
+        progressBar.setContentView(R.layout.progress_dialogue);
+        progressBar.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent
+        );
+        Thread timer=new Thread(){
+            @Override
+            public void run() {
+                try {
+                    while(true) {
+                        sleep(20);
+                        if (shoulddisplayloading == false) {
+                            progressBar.dismiss();
+                            break;
+                        }
+                        super.run();
+                    }
+                }catch (InterruptedException e){
+
+                }
+
+            }
+        };
+        timer.start();
 
         call.enqueue(new Callback<NewsModal>() {
             @Override
             public void onResponse(Call<NewsModal> call, Response<NewsModal> response) {
                 NewsModal newsModal = response.body();
-                progressBar.setVisibility(View.GONE);
+                shoulddisplayloading=false;
                 categoryPB.setVisibility(View.GONE);
                 categoryRV.setVisibility(View.VISIBLE);
 
@@ -107,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements CategoryRVAdapter
 
             @Override
             public void onFailure(Call<NewsModal> call, Throwable t) {
+                shoulddisplayloading=false;
                 Toast.makeText(MainActivity.this, "Connection Error", Toast.LENGTH_SHORT).show();
             }
         });
